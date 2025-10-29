@@ -1,66 +1,36 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+import Link from 'next/link';
+import { getPaginatedPostsData, PostData, getSortedPostsData } from '@/lib/posts';
+
+const POSTS_PER_PAGE = 3;
 
 export default function Home() {
+  const { paginatedPosts, totalPages } = getPaginatedPostsData(1, POSTS_PER_PAGE);
+  const totalPosts = getSortedPostsData().length;
+
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className={styles.intro}>
-          <h1>To get started, edit the page.tsx file.</h1>
-          <p>
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className={styles.secondary}
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+    <section style={{ width: '100%' }}>
+      <hr />
+      <h2>すべての投稿 ({totalPosts})</h2>
+      {paginatedPosts.map(({ id, date, title, summary, category, slug }: PostData) => (
+        <article key={id}>
+          <h3>
+            <Link href={`/posts/${slug}`}>{title}</Link>
+          </h3>
+          <small>
+            {date} &bull; <Link href={`/category/${category}`}>{category}</Link>
+          </small>
+          <p>{summary}</p>
+        </article>
+      ))}
+      <nav className="pagination-nav">
+        <ul>
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+            <li key={page} className={page === 1 ? 'active' : ''}>
+              <Link href={page === 1 ? '/' : `/page/${page}`}>{page}</Link>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    </section>
   );
 }

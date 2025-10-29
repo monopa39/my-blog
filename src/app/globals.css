@@ -1,12 +1,31 @@
+@import "https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css";
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* 라이트 모드 */
+  --background: #e5eaef; /* 완전 흰색 대신 살짝 따뜻한 흰색 */
+  --foreground: #222222; /* 완전 검정 대신 살짝 부드러운 검정 */
+  --pico-background-color: var(--background);
+  --pico-color: var(--foreground);
+  --pico-card-background-color: #2535b2; /* 임시로 밝은 회색 */
+  --article-background: #ffffff;
+  
+
+  /* 아티클 배경 색상 (라이트 모드) */
+  
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    /* 다크 모드 */
+    --background: #1e1e1e; /* 완전 검정 */
+    --foreground: #eeeeee; /* 완전 흰색 */
+    --pico-background-color: var(--background);
+    --pico-color: var(--foreground);
+    --article-background: #1f3a55;
+
+    --pico-card-background-color: #1764b2;
+
+    
   }
 }
 
@@ -35,8 +54,149 @@ a {
   text-decoration: none;
 }
 
+main.container .pagination-nav {
+  display: flex;
+  justify-content: center !important; /* Force centering */
+  width: 100%;
+}
+
+.pagination-nav ul {
+  display: flex;
+  justify-content: center;
+  list-style: none; /* Remove bullet points */
+  padding: 0;
+  gap: 1rem; /* Space between items */
+}
+
+.pagination-nav ul li.active a {
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+/* CategoryNav styles */
+.blog-title {
+  white-space: nowrap;
+}
+
+.category-nav {
+  position: relative;
+  display: inline-block;
+  margin-right: 2rem; /* Move icon further to the left */
+}
+
+.category-nav button {
+  background: none;
+  border: none;
+  font-size: 3rem; /* Increased size */
+  line-height: 1; /* Better vertical alignment */
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+  color: var(--foreground);
+}
+
+.category-menu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  position: absolute;
+  top: 100%; /* Position below the button */
+  right: 0; /* Align top-right corner with button */
+  background-color: var(--background);
+  border: 1px solid var(--foreground);
+  border-radius: 0.5rem;
+  min-width: 150px;
+  z-index: 1000;
+  overflow: hidden;
+  display: block !important; /* Force block display */
+
+  max-height: 0;
+  opacity: 0;
+  transition: max-height 0.5s ease-out, opacity 0.5s ease-out;
+}
+
+.category-menu.open {
+  max-height: 200px; /* Adjust based on content */
+  opacity: 1;
+  transition: max-height 0.5s ease-in, opacity 0.5s ease-in;
+}
+
+.category-menu li {
+  padding: 0.5rem 1rem;
+  display: block !important; /* Force vertical stacking */
+}
+
+.category-menu li:hover {
+  background-color: var(--foreground-alt);
+}
+
+.category-menu li a {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;
   }
+}
+
+/* General readability improvements for blog posts */
+p {
+  font-size: 1.125rem; /* Approximately 18px */
+  line-height: 1.7;
+  letter-spacing: 0.01em;
+  margin-bottom: 1.5em;
+}
+
+.post-content h1,
+.post-content h2,
+.post-content h3,
+.post-content h4,
+.post-content h5,
+.post-content h6 {
+  margin-top: 2em;
+  margin-bottom: 1em;
+  padding-bottom: 0.3em;
+  border-bottom: 1px solid #eaeaea; /* Light gray border */
+}
+
+.post-content h1 {
+  font-size: 2.5em;
+}
+
+.post-content h2 {
+  font-size: 2em;
+}
+
+.post-content h3 {
+  font-size: 1.75em;
+}
+
+.post-content h4 {
+  font-size: 1.5em;
+}
+
+.post-content h5 {
+  font-size: 1.25em;
+}
+
+.post-content h6 {
+  font-size: 1em;
+}
+
+.post-content {
+  padding: 3rem 4rem;
+  background-color: var(--article-background);
+}
+
+/* Hover effect for post titles */
+article h3 a {
+  transition: color 0.3s ease, text-decoration 0.3s ease;
+}
+
+article h3 a:hover {
+  color: color-mix(in srgb, var(--foreground) 80%, white); /* Slightly brighter than foreground */
+  text-decoration: none; /* Remove underline */
 }
