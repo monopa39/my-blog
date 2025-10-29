@@ -186,10 +186,9 @@ p {
   font-size: 1em;
 }
 
-.post-content {
-  padding: 3rem 4rem;
-  background-color: var(--article-background);
-}
+  .post-content {
+    margin: 0.5rem;
+  }
 
 /* Hover effect for post titles */
 article h3 a {
