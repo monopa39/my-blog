@@ -25,8 +25,12 @@ export interface PostData {
 }
 
 export function getSortedPostsData(): PostData[] {
-  const fileNames = fs.readdirSync(postsDirectory);
-  const allPostsData = fileNames
+  console.log(`Reading posts from: ${postsDirectory}`); // Log the directory path
+  try {
+    const fileNames = fs.readdirSync(postsDirectory);
+    console.log(`Found files: ${fileNames.join(', ')}`); // Log the found files
+
+    const allPostsData = fileNames
     .filter(fileName => fileName !== '.DS_Store') // Filter out .DS_Store files
     .map((fileName) => {
       const idFromFileName = fileName.replace(/\.md$/, '');
@@ -83,6 +87,10 @@ export function getSortedPostsData(): PostData[] {
       return -1;
     }
   });
+  } catch (error) {
+    console.error('Error reading posts directory:', error);
+    throw error; // Re-throw the error to ensure it's caught by the server
+  }
 }
 
 export function getAllPostIds() {
