@@ -4,6 +4,7 @@ import "./globals.css";
 import CategoryNav from '@/components/CategoryNav';
 import { getAllCategories } from '@/lib/posts';
 import Link from 'next/link';
+import Script from 'next/script';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -45,6 +46,16 @@ export default async function RootLayout({
     <html lang="ja">
       <head>
         <meta name="google-site-verification" content="DmmMEpGv2Afjd2rg0zrfUVkYr0zKdvXjhiHknJOBKuQ" />
+        <Script async src="https://www.googletagmanager.com/gtag/js?id=G-F1EYJ3QNGT" />
+        <Script id="google-analytics">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'G-F1EYJ3QNGT');
+          `}
+        </Script>
       </head>
       <body className={inter.className}>
         <main className="container">
