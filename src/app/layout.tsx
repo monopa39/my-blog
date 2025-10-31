@@ -44,8 +44,8 @@ export default async function RootLayout({
   return (
     <html lang="ja">
       <head>
-              
-            </head>
+        <meta name="google-site-verification" content="DmmMEpGv2Afjd2rg0zrfUVkYr0zKdvXjhiHknJOBKuQ" />
+      </head>
       <body className={inter.className}>
         <main className="container">
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
