@@ -32,9 +32,17 @@ export function getSortedPostsData(): PostData[] {
       const idFromFileName = fileName.replace(/\.md$/, '');
       const fullPath = path.join(postsDirectory, fileName);
       const fileContents = fs.readFileSync(fullPath, 'utf8');
-      const matterResult = matter(fileContents);
+      const { data: frontmatter } = matter(fileContents);
 
-      let slug = matterResult.data.slug;
+      // Essential fields for a post and for the RSS feed
+      const requiredFields = ['title', 'date', 'summary', 'category'];
+      for (const field of requiredFields) {
+        if (!frontmatter[field]) {
+          throw new Error(`Post "${fileName}" is missing required frontmatter field: "${field}"`);
+        }
+      }
+
+      let slug = frontmatter.slug;
 
       if (!slug) {
         // Generate fallback slug if not provided in frontmatter
@@ -59,11 +67,11 @@ export function getSortedPostsData(): PostData[] {
         id: slug, // Use slug as id for routing
         slug: slug, // Use slug for stable URLs
         originalFileName: fileName, // Store original filename
-        title: matterResult.data.title,
-        date: matterResult.data.date,
-        summary: matterResult.data.summary,
-        category: matterResult.data.category,
-        image: matterResult.data.image || null, // Extract image from frontmatter
+        title: frontmatter.title,
+        date: frontmatter.date,
+        summary: frontmatter.summary,
+        category: frontmatter.category,
+        image: frontmatter.image || null, // Extract image from frontmatter
       };
     });
 
