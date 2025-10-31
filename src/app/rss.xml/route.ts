@@ -15,7 +15,6 @@ export async function GET() {
     });
 
     posts.forEach(post => {
-        console.log(`Processing post: ${post.title}`);
         feed.item({
             title: post.title,
             description: post.summary,

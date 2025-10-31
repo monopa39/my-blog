@@ -4,11 +4,7 @@ import path from 'path';
 import matter from 'gray-matter';
 import { remark } from 'remark';
 import html from 'remark-html';
-import DOMPurify from 'dompurify';
-import { JSDOM } from 'jsdom';
 
-const window = new JSDOM('').window;
-const purify = DOMPurify(window);
 
 const postsDirectory = path.join(process.cwd(), 'posts');
 
@@ -25,12 +21,8 @@ export interface PostData {
 }
 
 export function getSortedPostsData(): PostData[] {
-  console.log(`Reading posts from: ${postsDirectory}`); // Log the directory path
-  try {
-    const fileNames = fs.readdirSync(postsDirectory);
-    console.log(`Found files: ${fileNames.join(', ')}`); // Log the found files
-
-    const allPostsData = fileNames
+  const fileNames = fs.readdirSync(postsDirectory);
+  const allPostsData = fileNames
     .filter(fileName => fileName !== '.DS_Store') // Filter out .DS_Store files
     .map((fileName) => {
       const idFromFileName = fileName.replace(/\.md$/, '');
@@ -87,10 +79,6 @@ export function getSortedPostsData(): PostData[] {
       return -1;
     }
   });
-  } catch (error) {
-    console.error('Error reading posts directory:', error);
-    throw error; // Re-throw the error to ensure it's caught by the server
-  }
 }
 
 export function getAllPostIds() {
@@ -115,7 +103,12 @@ export async function getPostData(slug: string): Promise<PostData> {
   const processedContent = await remark()
     .use(html)
     .process(matterResult.content);
-  const contentHtml = purify.sanitize(processedContent.toString()); // Sanitize HTML
+
+  const { JSDOM } = await import('jsdom');
+  const createDOMPurify = (await import('dompurify')).default;
+  const window = new JSDOM('').window;
+  const DOMPurify = createDOMPurify(window);
+  const contentHtml = DOMPurify.sanitize(processedContent.toString());
 
   return {
     ...post,
