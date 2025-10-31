@@ -19,7 +19,7 @@ export async function GET() {
             title: post.title,
             description: post.summary,
             url: `${URL}/posts/${post.id}`,
-            date: post.date,
+            date: new Date(post.date),
             categories: [post.category],
         });
     });
